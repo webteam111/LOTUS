@@ -1,17 +1,18 @@
 const config = require('../configuracion/database');
 
-const User = require('../models/usuario');
+const Psicologo = require('../models/psicologo');
 module.exports = (router) =>{
-    router.post('/register',(req,res)=>{
-       let user = new User();
+    router.post('/registerpsi',(req,res)=>{
+       let psic = new Psicologo();
        if (!req.body.email) {
            res.json({success: false, message: 'Favor de proporcionar un email'})
        } else {
-            user.email = req.body.email;
-            user.nombre = req.body.nombre;
-            user.password = req.body.password;
-            user.telefono = req.body.telefono;
-            user.save((err)=>{
+            psic.email = req.body.email;
+            psic.nombre = req.body.nombre;
+            psic.password = req.body.password;
+            psic.telefono = req.body.telefono;
+            psic.cedula = req.body.cedula;
+            psic.save((err)=>{
                 if (err) {
                     if (err.code == 11000) {
                     res.json({success: false, message: 'Email ya registrado'})
@@ -30,19 +31,19 @@ module.exports = (router) =>{
         } else if(!req.body.password) {
             res.json({success: false, message: 'Ingresar una contraseña'})
         } else{
-            User.findOne({email: req.body.email},(err,user)=>{
+            Psicologo.findOne({email: req.body.email},(err,psic)=>{
                 if (err) {
                     res.json({success: false, message: err})
                 } else {
-                    if (!user) {
+                    if (!psic) {
                         res.json({success: false, message: 'Usuario no encontrado'})
                     } else {
-                        const validPassword = user.comparePass(req.body.password);
+                        const validPassword = psic.comparePass(req.body.password);
                         if (!validPassword) {
                             res.json({success: false, message: 'Contraseña incorrecta'})
                         } else {
-                            const token = jwt.sign({userId : user._id}, config.secret,{expiresIn: '24h'});
-                            res.json({success: true, message: 'Usuario autenticado', token: token}) 
+                            const token = jwt.sign({psicId : psic._id}, config.secret,{expiresIn: '24h'});
+                            res.json({success: true, message: 'Psicologo autenticado', token: token}) 
                         }
                     }
                 }
@@ -68,7 +69,7 @@ module.exports = (router) =>{
       })
 
 router.get('/getProfile',(req,res)=>{
-    User.findOne({_id: req.decoded.userId}, (err,user)=>{
+    Psicologo.findOne({_id: req.decoded.psicrId}, (err,psic)=>{
         if (err){
             res.json({succes:false, message: err})
          } else {
@@ -79,13 +80,14 @@ router.get('/getProfile',(req,res)=>{
     })
 
 
-    router.put('/registerClient',(req,res)=>{
-        User.update({_id: req.decoded.userId},{$push: { 'cliente': {
+    router.put('/registerpsi',(req,res)=>{
+        Psicologo.update({_id: req.decoded.userId},{$push: { 'psicologo': {
         'nombre': req.body.nombre,
-        'telefono': req.body.telefono,
         'email': req.body.email,
+        'telefono': req.body.telefono,
+        'cedula': req.body.cedula,
         
-        }}},(err,user)=>{
+        }}},(err,psic)=>{
             if (err) {
                 res.json({succes: false, message: err})
             } else {

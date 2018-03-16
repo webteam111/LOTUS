@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt-nodejs');
 
 
 
-const userSchema = new Schema({
+const PsicSchema = new Schema({
    email: {type: String, unique: true, required: true},
    nombre: {type: String},
    password: {type: String},
@@ -23,7 +23,7 @@ const userSchema = new Schema({
    }]
   });
 
-  userSchema.pre('save', function(next){
+  PsicSchema.pre('save', function(next){
     if (!this.isModified('password')) {
       return next();
     }
@@ -38,10 +38,10 @@ const userSchema = new Schema({
     }
   });
   
-  userSchema.methods.comparePass = function(password){
+  PsicSchema.methods.comparePass = function(password){
     return bcrypt.compareSync(password, this.password);
   }
   
   
 
-  module.exports = mongoose.model('psicologo',userSchema)
+  module.exports = mongoose.model('psicologo',PsicSchema)
