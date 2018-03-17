@@ -1,8 +1,9 @@
 const config = require('../configuracion/database');
-
+const resquest = require('request');
 const Psicologo = require('../models/psicologo');
+
 module.exports = (router) =>{
-    router.post('/registerpsi',(req,res)=>{
+    router.post('/register',(req,res)=>{
        let psic = new Psicologo();
        if (!req.body.email) {
            res.json({success: false, message: 'Favor de proporcionar un email'})
@@ -20,12 +21,23 @@ module.exports = (router) =>{
                     res.json({success: false, message: err})
                     }
                 } else {
-                    res.json({success: true, message: 'Usuario Guardado'})
+                    res.json({success: true, message: 'Psicologo Guardado'})
                 }
             })
         }
     })
-    router.post('/login',(req,res)=>{
+    router.get('/test/:id', (req,res)=>{
+        request('http://search.sep.gob.mx/solr/cedulasCore/select?fl=%2A%2Cscore&q='+ req.params.id + '&start=0&rows=1&wt=json', 
+        function (error, response, body) {
+            if (error) {
+              res.json({error: error})
+            } else {
+              res.send(req.body)
+            }
+          });
+      })
+
+      router.post('/login',(req,res)=>{
         if (!req.body.email) {
             res.json({success: false, message: 'Ingresar un email'})
         } else if(!req.body.password) {
@@ -50,6 +62,8 @@ module.exports = (router) =>{
             })
         }
     })
+
+   
 
     //middleware
 	router.use((req,res,next)=>{
@@ -80,7 +94,7 @@ router.get('/getProfile',(req,res)=>{
     })
 
 
-    router.put('/registerpsi',(req,res)=>{
+    router.put('/psicologo',(req,res)=>{
         Psicologo.update({_id: req.decoded.userId},{$push: { 'psicologo': {
         'nombre': req.body.nombre,
         'email': req.body.email,
@@ -97,6 +111,7 @@ router.get('/getProfile',(req,res)=>{
         })
 
     })
+    
 
     return router
 }

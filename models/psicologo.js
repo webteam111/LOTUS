@@ -6,16 +6,11 @@ const bcrypt = require('bcrypt-nodejs');
 
 
 const PsicSchema = new Schema({
-   email: {type: String, unique: true, required: true},
    nombre: {type: String},
+   telefono: {type: String},
+   email: {type: String, unique: true, required: true},
    password: {type: String},
-   psi:[{
-     nombre: {type: String},
-     telefono: {type: Number},
-     email: {type: String},
-     cedula: {type: String}
-    
-   }],
+   cedula:{type:String},
    request:[{
        motivo: String,
        fecha: Date,

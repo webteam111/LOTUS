@@ -1,5 +1,5 @@
 const config = require('../configuracion/database');
-
+const resquest = require('request');
 const User = require('../models/usuario');
 module.exports = (router) =>{
     router.post('/register',(req,res)=>{
@@ -24,6 +24,7 @@ module.exports = (router) =>{
             })
         }
     })
+    
     router.post('/login',(req,res)=>{
         if (!req.body.email) {
             res.json({success: false, message: 'Ingresar un email'})
@@ -49,6 +50,7 @@ module.exports = (router) =>{
             })
         }
     })
+   
 
     //middleware
 	router.use((req,res,next)=>{
@@ -67,7 +69,7 @@ module.exports = (router) =>{
         }
       })
 
-router.get('/getProfile',(req,res)=>{
+router.get('/Profile',(req,res)=>{
     User.findOne({_id: req.decoded.userId}, (err,user)=>{
         if (err){
             res.json({succes:false, message: err})
@@ -79,8 +81,8 @@ router.get('/getProfile',(req,res)=>{
     })
 
 
-    router.put('/registerClient',(req,res)=>{
-        User.update({_id: req.decoded.userId},{$push: { 'cliente': {
+    router.put('/Usuario',(req,res)=>{
+        User.update({_id: req.decoded.userId},{$push: { 'Usuario': {
         'nombre': req.body.nombre,
         'telefono': req.body.telefono,
         'email': req.body.email,

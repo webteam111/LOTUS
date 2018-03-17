@@ -5,7 +5,8 @@ const app = express();
 const mongoose = require('mongoose');
 const config = require('./configuracion/database');
 const router = express.Router();
-const api = require('./routes/api')(router);
+const paciente = require('./routes/paciente')(router);
+const psicologo= require('./routes/psicologo')(router);
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 8080
 
@@ -21,7 +22,9 @@ mongoose.connect(config.uri, (err) =>{
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-app.use('/api', api);
+app.use('/paciente', paciente)
+app.use('/psicologo',psicologo);
+
 
 app.listen(port, ()=>{
     console.log("conectado"+ port);

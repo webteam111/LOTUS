@@ -21,7 +21,8 @@
     "jsonwebtoken": "^8.2.0",
     "mongodb-autoincrement": "^1.0.1",
     "mongoose": "^5.0.10",
-    "mongoose-sequence": "^4.0.1"
+    "mongoose-sequence": "^4.0.1",
+    "request": "^2.85.0"
   },
   "devDependencies": {
     "nodemon": "^1.17.2"
