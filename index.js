@@ -7,6 +7,7 @@ const config = require('./configuracion/database');
 const router = express.Router();
 const paciente = require('./routes/paciente')(router);
 const psicologo= require('./routes/psicologo')(router);
+const bauchs= require('./routes/bauchs')(router);
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 8080
 
@@ -24,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use('/paciente', paciente)
 app.use('/psicologo',psicologo);
-
+app.use('/bauchs', bauchs);
 
 app.listen(port, ()=>{
     console.log("conectado"+ port);

@@ -1,6 +1,7 @@
 const config = require('../configuracion/database');
-const resquest = require('request');
+const jwt = require('jsonwebtoken');
 const User = require('../models/usuario');
+
 module.exports = (router) =>{
     router.post('/register',(req,res)=>{
        let user = new User();
@@ -52,51 +53,16 @@ module.exports = (router) =>{
     })
    
 
-    //middleware
-	router.use((req,res,next)=>{
-        const token = req.headers['authorization'];
-        if (!token) {
-          res.json({succes: false, message:'Token requerido'})
-        } else {
-          jwt.verify(token, config.secret, (err, decoded) =>{
-            if (err) {
-              res.json({succes: false, message: 'Token invalido' + err})
-            } else {
-              req.decoded = decoded;
-              next();
-            }
-          })
-        }
-      })
-
-router.get('/Profile',(req,res)=>{
-    User.findOne({_id: req.decoded.userId}, (err,user)=>{
-        if (err){
-            res.json({succes:false, message: err})
-         } else {
-               res.json({succes: true,message: User})
-
-            }
-        })
-    })
+  
 
 
-    router.put('/Usuario',(req,res)=>{
-        User.update({_id: req.decoded.userId},{$push: { 'Usuario': {
-        'nombre': req.body.nombre,
-        'telefono': req.body.telefono,
-        'email': req.body.email,
-        
-        }}},(err,user)=>{
-            if (err) {
-                res.json({succes: false, message: err})
-            } else {
-                res.json({succes: true, message: 'Campos Actualizados'})
-            }
-        
-        })
 
-    })
+
+
+
+  
+
+
 
     return router
 }

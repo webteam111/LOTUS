@@ -8,12 +8,8 @@ const userSchema = new Schema({
    email: {type: String, unique: true, required: true},
    nombre: {type: String},
    password: {type: String},
-   psicologo:[{
-     nombre: {type: String},
-     telefono: {type: Number},
-     email: {type: String}
-    
-   }]
+   telefono: {type: Number},
+  
   });
 
   userSchema.pre('save', function(next){
